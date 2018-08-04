@@ -11,25 +11,46 @@
   integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
   crossorigin="anonymous"></script>
   <style>
+    #page-container {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    #banner {
+      width: 100%;
+      padding-bottom: 15px
+    }
+
+    #wrapper {
+      padding: 8px;
+      marging: 0;
+      border: 0;
+    }
+
     #photo-gallery {
       display: inline-block;
-      width: 50%;
+      width: 49%;
       vertical-align: top;
     }
 
     #product-info {
+      width: 49%;
       display: inline-block;
     }
   </style>
 </head>
-<body>
-  <div id="photo-gallery"></div>
-  <div id="product-info"></div>
-  <div id="app"></div>
-  <div id="service"></div>
+<body id="page-container">
+  <img id="banner" src="https://s3-us-west-1.amazonaws.com/viamis/Screen+Shot+2018-08-04+at+3.29.49+PM.png" />
+  <div id="wrapper">
+    <div id="photo-gallery"></div>
+    <div id="product-info"></div>
+    <div id="app"></div>
+    <div id="service"></div>
+  </div>
   <script src="https://s3-us-west-1.amazonaws.com/viamis-cdn/reviewBundle.js" charset="utf-8"></script>
   <script src="https://s3-us-west-1.amazonaws.com/viamis-ml-cdn/bundle.js" charset="utf-8"></script>
-  <script src="https://s3-us-west-1.amazonaws.com/viamis-cdn/bundleHK.js" charset="utf-8"></script>
+  <script src="https://s3-us-west-1.amazonaws.com/hanjoonk/similarBundle.js" charset="utf-8"></script>
   <script src="https://s3-us-west-1.amazonaws.com/viamis/bundle.js" type="application/javascript"></script>
 </body>
 </html>
