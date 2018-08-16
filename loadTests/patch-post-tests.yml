@@ -1,0 +1,44 @@
+config:
+  target: "http://localhost:3003"
+  processor: "./testData.js"
+  phases:
+    - duration: 10
+      arrivalRate: 5
+      rampTo: 50
+    - duration: 600
+      arrivalRate: 50
+    - duration: 30
+      arrivalRate: 50
+      rampTo: 5
+scenarios:
+  - name: "Patch product info"
+    flow:
+      - function: "generateProductInfo"
+      - patch:
+          url: "/products/{{ id }}"
+          json:
+            brand: "{{ brand }}"
+            is_prime: "{{ is_prime }}"
+            num_questions: "{{ num_questions }}"
+            product_name: "{{ product_name }}"
+            product_price: "{{ product_price }}"
+            product_tier: "{{ product_tier }}"
+            review_totals: "{{ review_totals }}"
+            seller_name: "{{ seller_name }}"
+            stock_count: "{{ stock_count }}"
+            thumbnail_url: "{{ thumbnail_url }}"
+  # - name: "Post product info"
+  #   flow:
+  #     - post:
+  #         url: "/products"
+  #         json:
+  #           brand: "{{ brand }}"
+  #           is_prime: "{{ is_prime }}"
+  #           num_questions: "{{ num_questions }}"
+  #           product_name: "{{ product_name }}"
+  #           product_price: "{{ product_price }}"
+  #           product_tier: "{{ product_tier }}"
+  #           review_totals: "{{ review_totals }}"
+  #           seller_name: "{{ seller_name }}"
+  #           stock_count: "{{ stock_count }}"
+  #           thumbnail_url: "{{ thumbnail_url }}"
