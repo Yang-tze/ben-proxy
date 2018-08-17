@@ -44,7 +44,7 @@ app.get("/:productId", function(req, res) {
       Layout(
         "Yang-tze",
         App(...components),
-        Scripts(Object.keys(services), props)
+        Scripts(Object.keys(services), JSON.stringify(props))
       )
     );
   });
