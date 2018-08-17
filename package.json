@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "load-test-get": "node ./loadTests/getTests.js",
+    "load-test-patch-post": "artillery run ./loadTests/patch-post-tests.yml",
     "start": "nodemon server.js"
   },
   "author": "",
@@ -23,5 +25,8 @@
     "nodemon": "^1.18.3",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
+  },
+  "devDependencies": {
+    "siege": "^0.2.0"
   }
 }
