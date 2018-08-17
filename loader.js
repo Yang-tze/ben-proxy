@@ -11,16 +11,22 @@ const loadBundle = (cache, item, filename) => {
   }, 0);
 };
 
-const fetchBundles = (path, services, suffix = "", require = false) => {
+const fetchBundles = (
+  path,
+  services,
+  ext = "js",
+  suffix = "",
+  require = false
+) => {
   Object.keys(services).forEach(item => {
-    const filename = `${path}/${item}${suffix}.js`;
+    const filename = `${path}/${item}${suffix}.${ext}`;
     exists(filename)
       .then(() => {
         require ? loadBundle(services, item, filename) : null;
       })
       .catch(err => {
         if (err.code === "ENOENT") {
-          const url = `${services[item]}${suffix}.js`;
+          const url = `${services[item]}${suffix}.${ext}`;
           console.log(`Fetching: ${url}`);
           fetch(url).then(res => {
             const dest = fs.createWriteStream(filename);
@@ -38,7 +44,8 @@ const fetchBundles = (path, services, suffix = "", require = false) => {
 
 module.exports = (clientPath, serverPath, services) => {
   fetchBundles(clientPath, services);
-  fetchBundles(serverPath, services, "-server", true);
+  fetchBundles(clientPath, services, "css");
+  fetchBundles(serverPath, services, "js", "-server", true);
 
   return services;
 };

@@ -20,12 +20,14 @@ const services = require("./loader.js")(
   serverBundles,
   serviceConfig
 );
+const serviceNames = Object.keys(services);
 
 const React = require("react");
 const ReactDom = require("react-dom/server");
 const Layout = require("./templates/layout");
 const App = require("./templates/app");
 const Scripts = require("./templates/scripts");
+const Styles = require("./templates/styles");
 
 // see: https://medium.com/styled-components/the-simple-guide-to-server-side-rendering-react-with-styled-components-d31c6b2b8fbf
 const renderComponents = (components, props = {}) => {
@@ -40,12 +42,11 @@ app.get("/:productId", function(req, res) {
     params: { productId }
   } = req;
   const props = {};
-  const endpoints = Object.keys(apiConfig);
   const requests = [];
-  endpoints.forEach(endpoint => {
+  serviceNames.forEach(serviceName => {
     requests.push(
-      axios.get(apiConfig[endpoint] + productId).then(info => {
-        props[endpoint] = { productData: info.data };
+      axios.get(apiConfig[serviceName] + productId).then(info => {
+        props[serviceName] = { productData: info.data };
       })
     );
   });
@@ -55,7 +56,8 @@ app.get("/:productId", function(req, res) {
       Layout(
         "Yang-tze",
         App(...components),
-        Scripts(Object.keys(services), props)
+        Scripts(serviceNames, props),
+        Styles(serviceNames)
       )
     );
   });
