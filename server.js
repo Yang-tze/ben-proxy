@@ -3,6 +3,7 @@ require("newrelic");
 const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
+const axios = require("axios");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -32,11 +33,21 @@ const renderComponents = (components, props = {}) => {
   });
 };
 
-app.get("/:id", function(req, res) {
-  let components = renderComponents(services, { itemid: req.params.id });
-  res.end(
-    Layout("Yang-tze", App(...components), Scripts(Object.keys(services)))
-  );
+app.get("/:productId", function(req, res) {
+  const {
+    params: { productId }
+  } = req;
+  axios.get("http://localhost:3003/products/" + productId).then(productInfo => {
+    const props = { productData: productInfo.data };
+    const components = renderComponents(services, props);
+    res.end(
+      Layout(
+        "Yang-tze",
+        App(...components),
+        Scripts(Object.keys(services), props)
+      )
+    );
+  });
 });
 
 app.listen(port, () => {
