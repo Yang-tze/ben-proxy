@@ -29,7 +29,6 @@ const App = require("./templates/app");
 const Scripts = require("./templates/scripts");
 const Styles = require("./templates/styles");
 
-// see: https://medium.com/styled-components/the-simple-guide-to-server-side-rendering-react-with-styled-components-d31c6b2b8fbf
 const renderComponents = (components, props = {}) => {
   return Object.keys(components).map(item => {
     let component = React.createElement(components[item], props[item]);
