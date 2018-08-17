@@ -32,7 +32,7 @@ const renderComponents = (components, props = {}) => {
   });
 };
 
-app.get("/items/:id", function(req, res) {
+app.get("/:id", function(req, res) {
   let components = renderComponents(services, { itemid: req.params.id });
   res.end(
     Layout("Yang-tze", App(...components), Scripts(Object.keys(services)))
