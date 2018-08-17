@@ -11,7 +11,7 @@ module.exports = (items, props) => `
       .map(
         item => `
       ReactDOM.hydrate(
-        React.createElement(${item}, ${props}),
+        React.createElement(${item}, ${JSON.stringify(props[item])}),
         document.getElementById('${item}')
       );`
       )

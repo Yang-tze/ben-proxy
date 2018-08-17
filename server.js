@@ -10,6 +10,8 @@ const port = process.env.PORT || 3000;
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 
+const apiConfig = require("./api-config.json");
+
 const clientBundles = "./public/services";
 const serverBundles = "./templates/services";
 const serviceConfig = require("./service-config.json");
@@ -28,7 +30,7 @@ const Scripts = require("./templates/scripts");
 // see: https://medium.com/styled-components/the-simple-guide-to-server-side-rendering-react-with-styled-components-d31c6b2b8fbf
 const renderComponents = (components, props = {}) => {
   return Object.keys(components).map(item => {
-    let component = React.createElement(components[item], props);
+    let component = React.createElement(components[item], props[item]);
     return ReactDom.renderToString(component);
   });
 };
@@ -37,14 +39,16 @@ app.get("/:productId", function(req, res) {
   const {
     params: { productId }
   } = req;
-  axios.get("http://localhost:3003/products/" + productId).then(productInfo => {
-    const props = { productData: productInfo.data };
+  const props = {};
+  const endpoints = Object.keys(apiConfig);
+  axios.get(apiConfig[endpoints[0]] + productId).then(productInfo => {
+    props[endpoints[0]] = { productData: productInfo.data };
     const components = renderComponents(services, props);
     res.end(
       Layout(
         "Yang-tze",
         App(...components),
-        Scripts(Object.keys(services), JSON.stringify(props))
+        Scripts(Object.keys(services), props)
       )
     );
   });
