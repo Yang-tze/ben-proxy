@@ -41,8 +41,15 @@ app.get("/:productId", function(req, res) {
   } = req;
   const props = {};
   const endpoints = Object.keys(apiConfig);
-  axios.get(apiConfig[endpoints[0]] + productId).then(productInfo => {
-    props[endpoints[0]] = { productData: productInfo.data };
+  const requests = [];
+  endpoints.forEach(endpoint => {
+    requests.push(
+      axios.get(apiConfig[endpoint] + productId).then(info => {
+        props[endpoint] = { productData: info.data };
+      })
+    );
+  });
+  Promise.all(requests).then(() => {
     const components = renderComponents(services, props);
     res.end(
       Layout(
