@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "load-test-get": "node ./loadTests/getTests.js",
     "load-test-patch-post": "artillery run ./loadTests/patch-post-tests.yml",
+    "clear-bundles": "rm ./public/services/* && rm ./templates/services/*",
     "start": "nodemon server.js"
   },
   "author": "",

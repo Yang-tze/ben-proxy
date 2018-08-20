@@ -1,6 +1,6 @@
 node_modules/
 *.pem
 .env
-public/services/*.js
-teplates/services/*.js
+public/services/*
+teplates/services/*
 newrelic_agent.log
