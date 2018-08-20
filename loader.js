@@ -8,7 +8,7 @@ const loadBundle = (cache, item, filename) => {
   setTimeout(() => {
     console.log(`Loading: ${filename}`);
     cache[item] = require(filename).default;
-  }, 100);
+  }, 0);
 };
 
 const fetchBundles = (
