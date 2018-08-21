@@ -31,7 +31,7 @@ const fetchBundles = (
           fetch(url).then(res => {
             const dest = fs.createWriteStream(filename);
             res.body.pipe(dest);
-            res.body.on("finish", () => {
+            res.body.on("end", () => {
               require
                 ? loadBundle(services, item, filename)
                 : console.log("Fetched " + url);
