@@ -28,15 +28,17 @@ const fetchBundles = (
         if (err.code === "ENOENT") {
           const url = `${services[item]}${suffix}.${ext}`;
           console.log(`Fetching: ${url}`);
-          fetch(url).then(res => {
-            const dest = fs.createWriteStream(filename);
-            res.body.pipe(dest);
-            res.body.on("end", () => {
-              require
-                ? loadBundle(services, item, filename)
-                : console.log("Fetched " + url);
+          fetch(url)
+            .then(res => res)
+            .then(res => {
+              const dest = fs.createWriteStream(filename);
+              res.body.pipe(dest);
+              res.body.on("end", () => {
+                require
+                  ? loadBundle(services, item, filename)
+                  : console.log("Fetched " + url);
+              });
             });
-          });
         } else {
           console.log("WARNING: Unknown fs error");
         }
