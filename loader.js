@@ -31,6 +31,7 @@ const fetchBundles = (
           fetch(url)
             .then(res => res)
             .then(res => {
+              console.log(res);
               const dest = fs.createWriteStream(filename);
               res.body.pipe(dest);
               res.body.on("end", () => {
