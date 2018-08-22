@@ -61,6 +61,7 @@ const queryDbById = (productId, req, res) => {
     })
     .catch(err => {
       console.error("ERROR FOR PRODUCT ID", productId, "\n", err);
+      res.end("Oops! Poduct not found.");
     });
 };
 
