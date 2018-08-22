@@ -25,7 +25,8 @@
     "node-fetch": "^2.2.0",
     "nodemon": "^1.18.3",
     "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react-dom": "^16.4.2",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "siege": "^0.2.0"

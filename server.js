@@ -4,10 +4,11 @@ const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
 const axios = require("axios");
+const redis = require("./redis");
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const apiConfig = require("./api-config.json");
@@ -36,10 +37,7 @@ const renderComponents = (components, props = {}) => {
   });
 };
 
-app.get("/:productId", function(req, res) {
-  const {
-    params: { productId }
-  } = req;
+const queryDbById = (productId, req, res) => {
   const props = {};
   const requests = [];
   serviceNames.forEach(serviceName => {
@@ -49,59 +47,36 @@ app.get("/:productId", function(req, res) {
       })
     );
   });
-  Promise.all(requests).then(() => {
-    const components = renderComponents(services, props);
-    res.end(
-      Layout(
+  Promise.all(requests)
+    .then(() => {
+      const components = renderComponents(services, props);
+      const result = Layout(
         "Yang-tze",
         App(...components),
         Scripts(serviceNames, props),
         Styles(serviceNames)
-      )
-    );
+      );
+      redis.setnx(productId, result);
+      res.end(result);
+    })
+    .catch(err => {
+      console.error("ERROR FOR PRODUCT ID", productId, "\n", err);
+    });
+};
+
+app.get("/:productId", function(req, res) {
+  const {
+    params: { productId }
+  } = req;
+  redis.get(productId, (err, reply) => {
+    if (reply) {
+      res.end(reply);
+    } else {
+      queryDbById(productId, req, res);
+    }
   });
 });
 
 app.listen(port, () => {
   console.log(`server running at: http://localhost:${port}`);
 });
-
-// const express = require("express");
-// const bodyParser = require("body-parser");
-// const path = require("path");
-// const cors = require("cors");
-// const proxy = require("http-proxy-middleware");
-
-// const app = express();
-
-// app.use(cors());
-// app.use(bodyParser.json());
-
-// const localRoutes = {
-//   related: "http://localhost:3001",
-//   images: "http://localhost:3002",
-//   products: "http://localhost:3003",
-//   reviews: "http://localhost:3004"
-// };
-
-// const ec2Routes = {
-//   related: "http://ec2-34-238-117-212.compute-1.amazonaws.com/",
-//   images: "http://ec2-54-153-53-170.us-west-1.compute.amazonaws.com/",
-//   products: "http://ec2-52-90-134-215.compute-1.amazonaws.com",
-//   reviews: "http://ec2-34-224-31-187.compute-1.amazonaws.com/"
-// };
-
-// let route = localRoutes;
-
-// app.use("/related/**", proxy({ target: route.related, changeOrigin: true }));
-// app.use("/images/**", proxy({ target: route.images, changeOrigin: true }));
-// app.use("/products/**", proxy({ target: route.products, changeOrigin: true }));
-// app.use("/reviews/**", proxy({ target: route.reviews, changeOrigin: true }));
-
-// app.get("/", (req, res) => {
-//   res.redirect("/1");
-// });
-
-// app.use("/*", express.static("./"));
-
-// app.listen(3000, () => console.log("Listening on port 3000"));
