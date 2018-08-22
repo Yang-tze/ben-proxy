@@ -4,6 +4,7 @@ const express = require("express");
 const morgan = require("morgan");
 const path = require("path");
 const axios = require("axios");
+const redis = require("./redis");
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -36,10 +37,7 @@ const renderComponents = (components, props = {}) => {
   });
 };
 
-app.get("/:productId", function(req, res) {
-  const {
-    params: { productId }
-  } = req;
+const queryDbById = (productId, req, res) => {
   const props = {};
   const requests = [];
   serviceNames.forEach(serviceName => {
@@ -51,38 +49,34 @@ app.get("/:productId", function(req, res) {
   });
   Promise.all(requests).then(() => {
     const components = renderComponents(services, props);
-    res.end(
-      Layout(
-        "Yang-tze",
-        App(...components),
-        Scripts(serviceNames, props),
-        Styles(serviceNames)
-      )
+    const result = Layout(
+      "Yang-tze",
+      App(...components),
+      Scripts(serviceNames, props),
+      Styles(serviceNames)
     );
+    console.log(result);
+    redis.setnx(productId, result);
+    res.end(result);
+  });
+};
+
+app.get("/:productId", function(req, res) {
+  const {
+    params: { productId }
+  } = req;
+  redis.get(productId, (err, reply) => {
+    if (reply) {
+      res.end(reply);
+    } else {
+      queryDbById(productId, req, res);
+    }
   });
 });
 
 app.listen(port, () => {
   console.log(`server running at: http://localhost:${port}`);
 });
-
-// const express = require("express");
-// const bodyParser = require("body-parser");
-// const path = require("path");
-// const cors = require("cors");
-// const proxy = require("http-proxy-middleware");
-
-// const app = express();
-
-// app.use(cors());
-// app.use(bodyParser.json());
-
-// const localRoutes = {
-//   related: "http://localhost:3001",
-//   images: "http://localhost:3002",
-//   products: "http://localhost:3003",
-//   reviews: "http://localhost:3004"
-// };
 
 // const ec2Routes = {
 //   related: "http://ec2-34-238-117-212.compute-1.amazonaws.com/",
