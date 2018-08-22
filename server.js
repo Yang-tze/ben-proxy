@@ -77,25 +77,3 @@ app.get("/:productId", function(req, res) {
 app.listen(port, () => {
   console.log(`server running at: http://localhost:${port}`);
 });
-
-// const ec2Routes = {
-//   related: "http://ec2-34-238-117-212.compute-1.amazonaws.com/",
-//   images: "http://ec2-54-153-53-170.us-west-1.compute.amazonaws.com/",
-//   products: "http://ec2-52-90-134-215.compute-1.amazonaws.com",
-//   reviews: "http://ec2-34-224-31-187.compute-1.amazonaws.com/"
-// };
-
-// let route = localRoutes;
-
-// app.use("/related/**", proxy({ target: route.related, changeOrigin: true }));
-// app.use("/images/**", proxy({ target: route.images, changeOrigin: true }));
-// app.use("/products/**", proxy({ target: route.products, changeOrigin: true }));
-// app.use("/reviews/**", proxy({ target: route.reviews, changeOrigin: true }));
-
-// app.get("/", (req, res) => {
-//   res.redirect("/1");
-// });
-
-// app.use("/*", express.static("./"));
-
-// app.listen(3000, () => console.log("Listening on port 3000"));
