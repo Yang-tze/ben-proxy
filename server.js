@@ -55,7 +55,6 @@ const queryDbById = (productId, req, res) => {
       Scripts(serviceNames, props),
       Styles(serviceNames)
     );
-    console.log(result);
     redis.setnx(productId, result);
     res.end(result);
   });
