@@ -8,7 +8,7 @@ const redis = require("./redis");
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 
 const apiConfig = require("./api-config.json");
@@ -47,17 +47,21 @@ const queryDbById = (productId, req, res) => {
       })
     );
   });
-  Promise.all(requests).then(() => {
-    const components = renderComponents(services, props);
-    const result = Layout(
-      "Yang-tze",
-      App(...components),
-      Scripts(serviceNames, props),
-      Styles(serviceNames)
-    );
-    redis.setnx(productId, result);
-    res.end(result);
-  });
+  Promise.all(requests)
+    .then(() => {
+      const components = renderComponents(services, props);
+      const result = Layout(
+        "Yang-tze",
+        App(...components),
+        Scripts(serviceNames, props),
+        Styles(serviceNames)
+      );
+      redis.setnx(productId, result);
+      res.end(result);
+    })
+    .catch(err => {
+      console.error("ERROR FOR PRODUCT ID", productId, "\n", err);
+    });
 };
 
 app.get("/:productId", function(req, res) {
