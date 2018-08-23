@@ -66,7 +66,7 @@ const queryDbById = (productId, req, res) => {
     });
 };
 
-app.get("/:productId", function(req, res) {
+app.get("/:productId", (req, res) => {
   const {
     params: { productId }
   } = req;
@@ -77,6 +77,16 @@ app.get("/:productId", function(req, res) {
       queryDbById(productId, req, res);
     }
   });
+});
+
+// For loader.io testing
+app.get("/loaderio-9d2f69ebc5f9840e26a095183c954c65", (req, res) => {
+  res.sendFile(
+    path.resolve(
+      __dirname,
+      "../loadTests/loaderio-9d2f69ebc5f9840e26a095183c954c65.txt"
+    )
+  );
 });
 
 app.listen(port, () => {
