@@ -10,6 +10,15 @@ const port = process.env.PORT || 3000;
 
 // app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+// For loader.io testing
+app.get("/loaderio-9d2f69ebc5f9840e26a095183c954c65", (req, res) => {
+  res.sendFile(
+    path.resolve(
+      __dirname,
+      "./loadTests/loaderio-9d2f69ebc5f9840e26a095183c954c65.txt"
+    )
+  );
+});
 
 const apiConfig = require("./api-config.json");
 
@@ -77,16 +86,6 @@ app.get("/:productId", (req, res) => {
       queryDbById(productId, req, res);
     }
   });
-});
-
-// For loader.io testing
-app.get("/loaderio-9d2f69ebc5f9840e26a095183c954c65", (req, res) => {
-  res.sendFile(
-    path.resolve(
-      __dirname,
-      "../loadTests/loaderio-9d2f69ebc5f9840e26a095183c954c65.txt"
-    )
-  );
 });
 
 app.listen(port, () => {
