@@ -1,3 +1,5 @@
+const serviceConfig = require("../service-config.json");
+
 module.exports = items => `
   <style>
   body {
@@ -16,6 +18,6 @@ module.exports = items => `
   }
   </style>
     ${items.map(item => {
-      return `<link rel="stylesheet" href="/services/${item}.css" />`;
+      return `<link rel="stylesheet" href="${serviceConfig[item]}.css" />`;
     })}
 `;

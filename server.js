@@ -8,8 +8,9 @@ const redis = require("./redis");
 const app = express();
 const port = process.env.PORT || 3000;
 
-// app.use(morgan("dev"));
+app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+
 // For loader.io testing
 app.get("/loaderio-9d2f69ebc5f9840e26a095183c954c65", (req, res) => {
   res.sendFile(

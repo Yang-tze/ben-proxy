@@ -3,11 +3,11 @@ const fetch = require("node-fetch");
 const Promise = require("bluebird");
 const exists = Promise.promisify(fs.stat);
 
-const loadBundle = (cache, item, filename) => {
+const loadBundle = (services, item, filename) => {
   // add a small delay to ensure pipe has closed
   setTimeout(() => {
     console.log(`Loading: ${filename}`);
-    cache[item] = require(filename).default;
+    services[item] = require(filename).default;
   }, 0);
 };
 
@@ -45,7 +45,8 @@ const fetchBundles = (
   });
 };
 
-module.exports = (clientPath, serverPath, services) => {
+module.exports = (clientPath, serverPath, serviceConfig) => {
+  const services = Object.assign({}, serviceConfig);
   fetchBundles(clientPath, services);
   fetchBundles(clientPath, services, "css");
   fetchBundles(serverPath, services, "js", "-server", true);
